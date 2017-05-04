@@ -33,16 +33,16 @@ using namespace cv;
 int pos[5] = {1500, 1500, 1500, 1500, 1500};
 
 void plot(int *pos, int argc, char** argv){
-	float t[5], x, y, L1 = 15, L2 = 19, L3 = 4;
+	float t[4], x, y, L1 = 15, L2 = 19, L3 = 4;
 	int i, n;
 	int stepSize = 65;
 
-	for(i = 1; i<5;i++){
-		t[i] = 0.09*pos[i-1];
+	for(i = 0; i<4;i++){
+		t[i] = 0.09*pos[i];
 	}
 
-	x = L2*cos(t[1])*cos(t[2]+t[3]) + sin(t[1])*cos(t[1]) + L3*(cos(t[1] - t[4])*cos(t[2]+t[3]));
-	y = L3*(sin(t[1] - t[4])*sin(t[2]+t[3])) + L2*cos(t[1])*cos(t[2]+t[3]) + L1*cos(t[1]);
+	x = L2*cos(t[0])*cos(t[1]+t[2]) + sin(t[0])*cos(t[0]) + L3*(cos(t[0] - t[3])*cos(t[1] + t[2]));
+	y = L3*(sin(t[0] - t[3])*sin(t[1]+t[2])) + L2*cos(t[0])*cos(t[1]+t[2]) - L1*cos(t[0]);
         //alterou-se de -L1*cos(t[1]) para +L1*cos(t[1])
 
 	//! [load]
@@ -85,8 +85,8 @@ void plot(int *pos, int argc, char** argv){
     printf(" coordenada %s de tam %d", coordenada, n);
     ostringstream str;
     str << "(" << x << ", "<< y <<")";
-	putText(mat_img, str.str(), cvPoint((int)floor(abs(x))*37, (int)floor(abs(y))*37), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(200,200,250), 1, CV_AA);
-    printf("a\n");
+	putText(mat_img, str.str(), cvPoint((int)floor(abs(x))*10, (int)floor(abs(y))*10), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(200,200,250), 1, CV_AA);
+    printf("tamanho = %dx%d\n", width, height);
     //! [window]
     namedWindow( "Display window", WINDOW_AUTOSIZE ); // Create a window for display.
     printf("b\n");
@@ -176,7 +176,7 @@ int main(int argc, char** argv)
 		printf("Use q para movimentar para direita e w para esquerda\n");
 		printf("Insira o canal\n");
 		//system("/bin/stty raw");
-		in = getchar();
+		//in = getchar();
 		while((in = getchar())!=-1){
 			if (in == '0'){
 				jnt = 0; continue;
@@ -210,6 +210,26 @@ int main(int argc, char** argv)
 				sprintf(comando,"#0P1500 S500#1P1500 S500#2P1500 S500#3P1500 S500#4P1500 S500");
 				pos[0]=1500; pos[1]=1500; pos[2] = 1500; pos[3]=1500; pos[4]=1500;
 				enviar_comando(comando,serial_fd);
+				memset(comando, 0, BUFSIZE);
+			}else if(in == 'j'){
+				sprintf(comando,"#0P1455 S500#1P1585 S500#2P1915 S500#3P1080 S500#4P2400 S500");
+				pos[0]=1455; pos[1]=1585; pos[2] = 1915; pos[3]=1080; pos[4]=2400;
+				enviar_comando(comando,serial_fd);
+				plot(pos, argc, argv);
+				memset(comando, 0, BUFSIZE);
+			}
+			else if(in == 'k'){
+				sprintf(comando,"#0P1220 S500#1P1365 S500#2P1675 S500#3P1080 S500#4P2400 S500");
+				pos[0]=1220; pos[1]=1365; pos[2] = 1675; pos[3]=1080; pos[4]=2400;
+				enviar_comando(comando,serial_fd);
+				plot(pos, argc, argv);
+				memset(comando, 0, BUFSIZE);
+			}
+			else if(in == 'l'){
+				sprintf(comando,"#0P1460 S500#1P1210 S500#2P1470 S500#3P1080 S500#4P2400 S500");
+				pos[0]=1460; pos[1]=1210; pos[2] = 1470; pos[3]=1080; pos[4]=2400;
+				enviar_comando(comando,serial_fd);
+				plot(pos, argc, argv);
 				memset(comando, 0, BUFSIZE);
 			}
 		}
