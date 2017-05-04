@@ -83,7 +83,9 @@ void plot(int *pos, int argc, char** argv){
 	arrowedLine(mat_img, Point(0.1*width, 0.9*height), Point(width-1, 0.9*height), Scalar(255, 0, 0));
     n = sprintf(coordenada,"%d, %d", (int)floor(abs(x)), (int)floor(abs(y)));
     printf(" coordenada %s de tam %d", coordenada, n);
-	putText(mat_img, "p1", cvPoint((int)floor(abs(x))*37, (int)floor(abs(y))*37), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(200,200,250), 1, CV_AA);
+    ostringstream str;
+    str << "(" << x << ", "<< y <<")";
+	putText(mat_img, str.str(), cvPoint((int)floor(abs(x))*37, (int)floor(abs(y))*37), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(200,200,250), 1, CV_AA);
     printf("a\n");
     //! [window]
     namedWindow( "Display window", WINDOW_AUTOSIZE ); // Create a window for display.
