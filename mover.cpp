@@ -42,8 +42,8 @@ void plot(int *pos, int argc, char** argv){
 	}
 
 	x = L2*cos(t[1])*cos(t[2]+t[3]) + sin(t[1])*cos(t[1]) + L3*(cos(t[1] - t[4])*cos(t[2]+t[3]));
-	y = L3*(sin(t[1] - t[4])*sin(t[2]+t[3])) + L2*cos(t[1])*cos(t[2]+t[3]) - L1*cos(t[1]);
-
+	y = L3*(sin(t[1] - t[4])*sin(t[2]+t[3])) + L2*cos(t[1])*cos(t[2]+t[3]) + L1*cos(t[1]);
+        //alterou-se de -L1*cos(t[1]) para +L1*cos(t[1])
 
 	//! [load]
     String imageName( "triangulo.png" ); // 650x621
@@ -81,7 +81,7 @@ void plot(int *pos, int argc, char** argv){
 	
 	arrowedLine(mat_img, Point(0.1*width, 0.9*height), Point(0.1*width, 0), Scalar(255, 0, 0));
 	arrowedLine(mat_img, Point(0.1*width, 0.9*height), Point(width-1, 0.9*height), Scalar(255, 0, 0));
-    n = sprintf(coordenada,"%d, %d", (int)floor(abs(x)), (int)floor(abs(y)));
+    n = sprintf(coordenada,"%f, %f", x, y);
     printf(" coordenada %s de tam %d", coordenada, n);
     ostringstream str;
     str << "(" << x << ", "<< y <<")";
