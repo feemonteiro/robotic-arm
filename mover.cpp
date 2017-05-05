@@ -33,17 +33,30 @@ using namespace cv;
 int pos[5] = {1500, 1500, 1500, 1500, 1500};
 
 void plot(int *pos, int argc, char** argv){
-	float t[4], x, y, L1 = 15, L2 = 19, L3 = 4;
+	float t[4], x, y, L, L1 = 15, L2 = 19, L3 = 4;
 	int i, n;
 	int stepSize = 65;
 
 	for(i = 0; i<4;i++){
-		t[i] = 0.09*pos[i];
+		if(i != 1){
+			printf("%d: %f\n", i, 0.09*abs(pos[i]-1500));
+			t[i] = 3.14159*0.09*abs(pos[i]-1500)/180;
+			printf("%d: %f\n", i, t[i]);
+		}else{
+			printf("%d: %f\n", i, 0.09*abs(pos[i]-500));
+			t[i] = 3.14159*0.09*abs(pos[i]-500)/180;
+			printf("%d: %f\n", i, t[i]);
+		}
 	}
+	L = L1*cos(t[1]) + L2*cos(t[2]) + L3*cos(t[3]);
+	//float c1 = cos[0];
 
-	x = L2*cos(t[0])*cos(t[1]+t[2]) + sin(t[0])*cos(t[0]) + L3*(cos(t[0] - t[3])*cos(t[1] + t[2]));
-	y = L3*(sin(t[0] - t[3])*sin(t[1]+t[2])) + L2*cos(t[0])*cos(t[1]+t[2]) - L1*cos(t[0]);
+	//x = L2*cos(t[0])*cos(t[1]+t[2]) + sin(t[0])*cos(t[0]) + L3*(cos(t[0] - t[3])*cos(t[1] + t[2]));
+	//y = L3*(sin(t[0] - t[3])*sin(t[1]+t[2])) + L2*cos(t[0])*cos(t[1]+t[2]) - L1*cos(t[0]);
         //alterou-se de -L1*cos(t[1]) para +L1*cos(t[1])
+	x = L*cos(t[0]);
+	y = L*sin(t[0]);
+
 
 	//! [load]
     String imageName( "triangulo.png" ); // 650x621
@@ -82,7 +95,7 @@ void plot(int *pos, int argc, char** argv){
 	arrowedLine(mat_img, Point(0.1*width, 0.9*height), Point(0.1*width, 0), Scalar(255, 0, 0));
 	arrowedLine(mat_img, Point(0.1*width, 0.9*height), Point(width-1, 0.9*height), Scalar(255, 0, 0));
     n = sprintf(coordenada,"%f, %f", x, y);
-    printf(" coordenada %s de tam %d", coordenada, n);
+    printf(" coordenada %s de tam %d\n", coordenada, n);
     ostringstream str;
     str << "(" << x << ", "<< y <<")";
 	putText(mat_img, str.str(), cvPoint((int)floor(abs(x))*10, (int)floor(abs(y))*10), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(200,200,250), 1, CV_AA);
