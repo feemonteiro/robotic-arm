@@ -98,7 +98,7 @@ void plot(int *pos, int argc, char** argv){
     printf(" coordenada %s de tam %d\n", coordenada, n);
     ostringstream str;
     str << "(" << x << ", "<< y <<")";
-	putText(mat_img, str.str(), cvPoint((x-15.7)*35.2, height-((y-15.7)*35.2)), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,0,255), 1, CV_AA);
+	putText(mat_img, str.str(), cvPoint((x-13.7)*35.2, height-((y+2.5)*35.2)), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,0,255), 1, CV_AA);
     printf("tamanho = %dx%d\n", width, height);
     //! [window]
     namedWindow( "Display window", WINDOW_AUTOSIZE ); // Create a window for display.
