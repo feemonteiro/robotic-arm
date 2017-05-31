@@ -130,6 +130,74 @@ void movimento(int a, char mov, char* comando){
 	printf("[0]%d, [1]%d, [2]%d, [3]%d, [4]%d", pos[0], pos[1], pos[2], pos[3], pos[4]);
 }
 
+void inversamov(char* comando){
+	float h, r, c, t[4], L0 = 7, L1 = 15, L2 = 19, L3 = 4;
+	int i, p0, p1, p2, p3, p4;
+	float x, y, z, phi;
+	
+
+	if(scanf("%f %f %f %f", &x, &y, &z, &phi)==4){
+
+		phi = 3.14159*phi/180;
+		printf("phi: %f\n", phi);
+
+		h = sqrt(pow(x, 2) + pow(y, 2));
+		printf("h: %f\n", h);
+		c = z - L0 - L3*sin(phi);
+		printf("c: %f\n", c);
+		
+
+		t[0] = atan2(y/h, x/h);					// Theta 1 a 4
+		printf("A: %f\n", pow(h - L3*cos(phi), 2));
+		printf("powc: %f\n", pow(c, 2));
+		printf("powl1: %f\n", pow(L1, 2));
+		printf("powl2: %f\n", pow(L2, 2));
+		printf("denom: %f\n", 2*L1*L2);
+		printf("numer: %f\n", pow(h - L3*cos(phi), 2) + pow(c,2) - pow(L1, 2) - pow(L2, 2));
+		double denom = 2*L1*L2;
+		double numer = pow(h - L3*cos(phi), 2) + pow(c,2) - pow(L1, 2) - pow(L2, 2);
+
+		t[2] = acos(numer/denom);
+
+		//t[2] = acos((pow(h - L3*cos(phi), 2) + pow(c,2) - pow(L1, 2) - pow(L2, 2))/2*L1*L2);
+
+		r = sqrt(pow(L2*sin(t[2]),2) + pow(L1 + L2*cos(t[2]),2));
+		printf("r: %f\n", r);
+
+		t[1] = atan2(c, sqrt(pow(r,2) - pow(c, 2)));
+		t[3] = phi - t[1] - t[2];
+
+		printf("Calculo do t %f %f %f %f\n", t[0], t[1], t[2], t[3]);
+
+		for(i = 0; i<4;i++){
+			if(i == 0 || i == 1){
+				printf("%d: %f\n", i, 1500 + (180*t[i]/3.14159)/0.09);
+				pos[i] = (int) 1500 + (180*t[i]/3.14159)/0.09;
+				printf("%d: %d\n", i, pos[i]);
+			}else if(i == 2){
+				printf("%d: %f\n", i, 1500 + (180*t[i]/3.14159)/0.09);
+				pos[i] = (int) 0 + (180*t[i]/3.14159)/0.09;
+				printf("%d: %d\n", i, pos[i]);
+			}else{
+				printf("%d: %f\n", i, 1500 + (180*t[i]/3.14159)/0.09);
+				pos[i] = (int) 800 + (180*t[i]/3.14159)/0.09;
+				printf("%d: %d\n", i, pos[i]);
+			}
+		}
+
+		p0 = trava(0, pos[0]);
+		p1 = trava(1, pos[1]);
+		p2 = trava(2, pos[2]);
+		p3 = trava(3, pos[3]);
+		p4 = trava(4, 1500);
+
+		sprintf(comando,"#0P%d S500#1P%d S500#2P%d S500#3P%d S500#4P%d S500", p0, p1, p2, p3, p4);
+	}else{
+		printf("Tá loco minrmã\n");
+	}
+
+}
+
 void pos_direto(char* comando, int argc, char** argv){
 	int p0, p1, p2 , p3 ,p4;
 	if( scanf("%d %d %d %d %d", &p0, &p1, &p2, &p3, &p4) == 5){
@@ -243,6 +311,11 @@ int main(int argc, char** argv)
 				pos[0]=1460; pos[1]=1210; pos[2] = 1470; pos[3]=1080; pos[4]=2400;
 				enviar_comando(comando,serial_fd);
 				plot(pos, argc, argv);
+				memset(comando, 0, BUFSIZE);
+			}
+			else if(in == 'i'){
+				inversamov(comando);
+				enviar_comando(comando,serial_fd);
 				memset(comando, 0, BUFSIZE);
 			}
 		}
